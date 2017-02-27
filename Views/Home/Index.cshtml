@@ -1,0 +1,155 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Getting started</h2>
+            <p>
+                Come in to the Class and Students.
+            </p>
+        </div>
+    </div>
+    <div class="row" ng-app="CASApp">
+        <div class="col-md-10">
+            <h2>Classes</h2>
+            <div ng-controller="classCtrl as $ctrl">
+
+                <button type="button" ng-click="$ctrl.addClassItem()" class="btn btn-sm btn-success">
+                    <i class="glyphicon glyphicon-plus">
+                    </i> Add a new class
+                </button>
+                <table st-safe-src="$ctrl.rowClassCollection" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Class name</th>
+                            <th>Location</th>
+                            <th>Teacher</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in $ctrl.rowClassCollection">
+                            <td>{{row.className | uppercase}}</td>
+                            <td>{{row.location}}</td>
+                            <td>{{row.teacher}}</td>
+                            <td>
+                                <button type="button" ng-click="$ctrl.selectRow(row)" class="btn btn-sm btn-info">
+                                    <i class="glyphicon glyphicon-play-circle">
+                                        Select
+                                    </i>
+                                </button>
+                            </td>
+                            <td>
+                                <button type="button" ng-click="$ctrl.editRow(row)" class="btn btn-sm btn-primary">
+                                    <i class="glyphicon glyphicon-edit">
+                                        Edit
+                                    </i>
+                                </button>
+                            </td>
+                            <td>
+                                <button type="button" ng-click="$ctrl.removeRow(row)" class="btn btn-sm btn-danger">
+                                    <i class="glyphicon glyphicon-remove-circle">
+                                        Delete
+                                    </i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <script type="text/ng-template" id="myModalContent.html">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="modal-title">Create New class!</h3>
+                    </div>
+                    <div class="modal-body" id="modal-body">
+                        <label>New Class Name:</label><input type="text" ng-model="$ctrl.newClassName" class="form-control" />
+                        <label>New Class Location:</label><input type="text" ng-model="$ctrl.newClassLocation" class="form-control" />
+                        <label>New Class Teacher:</label><input type="text" ng-model="$ctrl.newClassTeacher" class="form-control" />
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
+                        <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+                    </div>
+                </script>
+                <script type="text/ng-template" id="myModalStudentContent.html">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="modal-title">Add New Student!</h3>
+                    </div>
+                    <div class="modal-body" id="modal-body">
+                        <label>New Student Name:</label><input type="text" ng-model="$ctrl.newStudentName" class="form-control" />
+                        <label>New Student Surname:</label><input type="text" ng-model="$ctrl.newStudentSurname" class="form-control" />
+                        <label>New Student DOB:</label><input type="date" ng-model="$ctrl.newStudentDob" class="form-control" />
+                        <label>New Student GPA:</label><input type="text" ng-model="$ctrl.newStudentGpa" class="form-control" />
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="button" ng-click="$ctrl.okStudent()">OK</button>
+                        <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+                    </div>
+                </script>
+                <script type="text/ng-template" id="myDeleteContent.html">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="modal-title">Delete?</h3>
+                    </div>
+                    <div class="modal-body" id="modal-body">
+                        {{ $ctrl.selectedStudentName != undefined?$ctrl.selectedStudentName: $ctrl.selectedClassName }}
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="button" ng-click="$ctrl.removeOk()">OK</button>
+                        <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+                    </div>
+                </script>
+                <!-- students -->
+                <div ng-show="$ctrl.selectedClassId != undefined ">
+                    <button type="button" ng-click="$ctrl.addStudentItem()" class="btn btn-sm btn-success">
+                        <i class="glyphicon glyphicon-plus">
+                        </i> Add a new student to class <b>{{$ctrl.selectedClassName}}</b>
+                    </button>
+                    <table st-safe-src="$ctrl.rowStudentCollection" class="table table-striped">
+                        <!--st-table="$ctrl.displayedClassCollection"  -->
+                        <thead>
+                            <tr>
+                                <th>Student name</th>
+                                <th>Age</th>
+                                <th>GPA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in $ctrl.rowStudentCollection">
+                                <td ng-if="row.gpa > 3.2"><span style="color:red;">{{row.studentFullName}}</span></td>
+                                <td ng-if="row.gpa <= 3.2">{{row.studentFullName}}</td>
+                                <td>{{row.age}}</td>
+                                <td>{{row.gpa}}</td>
+                                <td>
+                                    <button type="button" ng-click="$ctrl.editStudentRow(row)" class="btn btn-sm btn-primary">
+                                        <i class="glyphicon glyphicon-edit">
+                                            Edit
+                                        </i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button type="button" ng-click="$ctrl.removeStudentRow(row)" class="btn btn-sm btn-danger">
+                                        <i class="glyphicon glyphicon-remove-circle">
+                                            Delete
+                                        </i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-2">
+            <h2>Copyright</h2>
+            <p>Developed by Sergey Pogosbekov</p>
+            <p><a class="btn btn-default" href="mailto:trinity.infoman@gmail.com">Learn more &raquo;</a></p>
+        </div>
+    </div>
+</div>
+@section scripts {
+    @Scripts.Render("~/Scripts/angular.js")
+    <script src="~/Scripts/smart-table.min.js"></script>
+    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+    @Scripts.Render("~/app/classesandstudents-controller.js")
+}
